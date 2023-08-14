@@ -5,6 +5,6 @@
 
 /* estilo via classe aplicada pelo angular */
 /* aplica a todos os componente usando esta classe exceto o tag form */
-.ng-invalid.ng-touched:not(form) {
+.ng-invalid.ng-touched:not(form):not(div) {
     border: 1px solid red;
 }

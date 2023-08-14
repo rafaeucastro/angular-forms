@@ -28,7 +28,8 @@
     <div class="form-group row">
       <div class="col-sm-3">
         <label for="cep" class="form-label">CEP</label>
-        <input type="text" id="cep" name="cep" class="form-control" ngModel required #cep="ngModel">
+        <input type="text" id="cep" name="cep" class="form-control" ngModel required #cep="ngModel"
+        (blur)="consultaCep(cep.value, f)">
         <small *ngIf="fieldIsValid(cep)">CEP é obrigatório</small>
       </div>
       <div class="col-sm-3">
@@ -43,16 +44,16 @@
     </div>
   
     <div class="form-group">
-      <div class="col-sm-12">
-        <label for="rua" class="form-label">Rua</label>
-      </div>
-      <div class="col-sm-12">
-        <input type="text" class="form-control" id="rua" name="rua" ngModel #rua="ngModel">
-      </div>
-      <div class="col-sm-12">
-        <small *ngIf="fieldIsValid(rua)">Rua é obrigatório</small>
-      </div>
+    <div class="col-sm-12">
+      <label for="rua" class="form-label">Rua</label>
     </div>
+    <div class="col-sm-12">
+      <input type="rua" class="form-control" id="rua" name="rua" required ngModel #rua="ngModel">
+    </div>
+    <div class="col-sm-12">
+      <small *ngIf="fieldIsValid(rua)">Este campo é obrigatório</small>
+    </div>
+  </div>
   
     <div class="form-group row">
       <div class="col-sm-5">
@@ -62,13 +63,13 @@
       </div>
       <div class="col-sm-4">
         <label for="cidade" class="form-label">Cidade</label>
-        <input type="text" id="cidade" name="cidade" class="form-control" ngModel required #cidade="ngModel">
+        <input type="text" id="cidade" name="cidade" class="form-control" ngModel required #cidade="ngModel" readonly>
         <small *ngIf="fieldIsValid(cidade)">Cidade é obrigatório</small>
       </div>
       <div class="col-sm-3">
         <label for="estado" class="form-label">Estado</label>
         <input type="text" id="estado" name="estado" class="form-control" ngModel required
-          #estado="ngModel">
+          #estado="ngModel" readonly>
         <small *ngIf="fieldIsValid(estado)">Estado é obrigatório</small>
       </div>
     </div>
