@@ -1,0 +1,10 @@
+/* Aplicando estilo via seletores normais */
+/* input:required:invalid, input:focus:invalid {
+    border: 1px solid red;
+} */
+
+/* estilo via classe aplicada pelo angular */
+/* aplica a todos os componente usando esta classe exceto o tag form */
+.ng-invalid.ng-touched:not(form) {
+    border: 1px solid red;
+}
