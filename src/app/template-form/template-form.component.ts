@@ -1,10 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { catchError } from 'rxjs';
+import { CepService } from '../shared/cep.service';
 
 @Component({
   selector: 'app-template-form',
   templateUrl: './template-form.component.html',
-  styleUrls: ['./template-form.component.css']
+  styleUrls: ['./template-form.component.css'],
+  providers: [CepService],
 })
 export class TemplateFormComponent {
   usuario: any = {
@@ -13,10 +16,12 @@ export class TemplateFormComponent {
     password: 'GhostPass',
   };
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private cepService: CepService) { }
 
   onSubmit(f: any) {
     console.log(f);
+
+    this.http.post('servidor/form', JSON.stringify(f.value)).subscribe(dados => console.log(dados));
   }
 
   fieldIsValid(f: any): boolean {
@@ -24,31 +29,28 @@ export class TemplateFormComponent {
   }
 
   consultaCep(cep: any, form: any) {
-    console.log(cep);
-    cep.replace(RegExp("\/D/g"), '');
-
-    if (cep != "") {
-      var validaCep = RegExp('\^[0-9]{8}\$');
-      if (validaCep.test(cep)) {
-        const url = `https://viacep.com.br/ws/${cep}/json`;
-        const options = {
-          responseType: 'json' as const,
-          observe: 'response' as const
-        };
-        this.http.get(url, options).subscribe((response => this.popularFormulario(response.body, form)));
-      }
-    }
+    this.cepService.consultaCep(cep, (data) => this.popularFormulario(data, form));
   }
 
-  popularFormulario(dados: any, form: any) {
+  popularFormulario(dados: any, ngForm: any) {
     console.log(dados);
+    // ngForm.setValue({
+    //   nome: ngForm.value.nome,
+    //   email: ngForm.value.email,
+    //   endereco: {
+    //     cep: dados.cep,
+    //     numero: '',
+    //     complemento: dados.complemento,
+    //     rua: dados.logradouro,
+    //     bairro: dados.bairro,
+    //     cidade: dados.localidade,
+    //     estado: dados.uf,
+    //   },
+    // });
 
-    form.setValue({
-      nome: 'null',
-      email: null,
+     ngForm.form.patchValue({
       endereco: {
         cep: dados.cep,
-        numero: '',
         complemento: dados.complemento,
         rua: dados.logradouro,
         bairro: dados.bairro,
@@ -56,5 +58,9 @@ export class TemplateFormComponent {
         estado: dados.uf,
       },
     });
+  }
+
+  resetarDadosForm() {
+
   }
 }
