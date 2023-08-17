@@ -1,5 +1,7 @@
+import { EstadoBR } from './../shared/models/estado-br';
+import { DropdownService } from './../shared/dropdown.service';
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CepService } from '../shared/cep.service';
 
@@ -9,10 +11,15 @@ import { CepService } from '../shared/cep.service';
   styleUrls: ['./data-form.component.css'],
   providers: [CepService],
 })
-export class DataFormComponent {
+export class DataFormComponent implements OnInit {
+  estados: EstadoBR[] = [];
   formulario: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private http: HttpClient, private cepService: CepService) {
+  constructor(private formBuilder: FormBuilder,
+    private http: HttpClient,
+    private cepService: CepService,
+    private dropdownService: DropdownService,
+    ) {
     // this.formulario = new FormGroup({
     //   nome: new FormControl(null),
     //   email: new FormControl(null),
@@ -36,6 +43,13 @@ export class DataFormComponent {
     });
 
     console.log(this.formulario);
+  }
+
+  ngOnInit(): void {
+    this.dropdownService.getEstados().subscribe(response => {
+      this.estados = response as EstadoBR[];
+      console.log(this.estados);
+    });
   }
 
   fieldIsValid(campo: string): boolean {

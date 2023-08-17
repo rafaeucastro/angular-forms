@@ -1,5 +1,6 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { of } from 'rxjs';
 
 @Injectable()
 export class CepService {
@@ -20,5 +21,7 @@ export class CepService {
             this.http.get(url, options).subscribe((response) => callback(response.body!));
           }
         }
+
+        return of({});
     }
 }
