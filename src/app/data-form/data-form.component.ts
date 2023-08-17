@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CepService } from '../shared/cep.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-data-form',
@@ -12,7 +13,8 @@ import { CepService } from '../shared/cep.service';
   providers: [CepService],
 })
 export class DataFormComponent implements OnInit {
-  estados: EstadoBR[] = [];
+  //estados: EstadoBR[] = [];
+  estados: Observable<EstadoBR[]> = new Observable();
   formulario: FormGroup;
 
   constructor(private formBuilder: FormBuilder,
@@ -46,10 +48,12 @@ export class DataFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.dropdownService.getEstados().subscribe(response => {
-      this.estados = response as EstadoBR[];
-      console.log(this.estados);
-    });
+    this.estados = this.dropdownService.getEstados() as Observable<EstadoBR[]>;
+
+    // this.dropdownService.getEstados().subscribe(response => {
+    //   this.estados = response as EstadoBR[];
+    //   console.log(this.estados);
+    // });
   }
 
   fieldIsValid(campo: string): boolean {
