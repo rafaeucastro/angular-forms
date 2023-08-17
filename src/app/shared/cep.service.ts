@@ -8,7 +8,7 @@ export class CepService {
     consultaCep(cep: string, callback: (value : Object) => void) {
         cep.replace(RegExp("\/D/g"), '');
     
-        if (cep != "") {
+        if (cep != "" && cep != null) {
           var validaCep = RegExp('\^[0-9]{8}\$');
     
           if (validaCep.test(cep)) {
