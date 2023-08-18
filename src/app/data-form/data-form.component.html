@@ -73,18 +73,28 @@
         </div>
     </div>
 
-    <div class="form-group">
-        <div class="col-sm-3">
+    <div class="form-group row">
+        <div class="col-sm-4">
             <label for="cargo" class="form-label">Cargo</label>
             <select id="cargo" formControlName="cargo" class="form-control" [compareWith]="compararCargos">
                 <option *ngFor="let cargo of cargos" [ngValue]="cargo"> {{ cargo.desc }}</option>
             </select>
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-4">
             <label for="tecnologia" class="form-label">Tecnologia</label>
             <select multiple id="tecnologia" formControlName="tecnologias" class="form-control">
                 <option *ngFor="let tecnologia of tecnologias" [value]="tecnologia.nome"> {{ tecnologia.desc }}</option>
             </select>
+        </div>
+        <div class="col-sm-4">
+            <label for="newsletter" class="control-label">Newsletter</label>
+            <div id="Newsletter" class="row">
+                <div *ngFor="let item of newsletter" class="col-sm-4">
+                    <label class="radio-inline">
+                        <input type="radio" [value]="item.valor" formControlName="newsletter"> {{ item.desc }}
+                    </label>
+                </div>
+            </div>
         </div>
     </div>
 
