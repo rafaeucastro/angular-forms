@@ -2,7 +2,7 @@ import { EstadoBR } from './../shared/models/estado-br';
 import { DropdownService } from './../shared/dropdown.service';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormRecord, Validators } from '@angular/forms';
 import { CepService } from '../shared/cep.service';
 import { Observable } from 'rxjs';
 
@@ -18,6 +18,7 @@ export class DataFormComponent implements OnInit {
   cargos: any[] = [];
   tecnologias: any[] = [];
   newsletter: any[] = [];
+  frameworks: string[] = ['Angular', 'React', 'Vue', 'Sencha'];
   formulario: FormGroup;
 
   constructor(private formBuilder: FormBuilder,
@@ -48,9 +49,17 @@ export class DataFormComponent implements OnInit {
       cargo: [null],
       tecnologias: [null],
       newsletter: ['s'],
+      termos: [null, Validators.requiredTrue],
+      frameworks: this.buildFrameworks(),
     });
 
     console.log(this.formulario);
+  }
+
+  buildFrameworks() {
+    const values = this.frameworks.map(framework => new FormControl(false));
+    
+    return this.formBuilder.array(values);
   }
 
   ngOnInit(): void {
@@ -67,16 +76,26 @@ export class DataFormComponent implements OnInit {
 
   fieldIsValid(campo: string): boolean {
     let input = this.formulario.get([campo]);
+    let camposSimples = ['nome', 'email', 'termos'];
     
-    if(campo != 'nome' && campo != 'email') {
+    if(!camposSimples.includes(campo)){
       input = this.formulario.get(['endereco', campo])
     };
     return input!.valid && (input!.touched || input!.dirty);
   }
 
   onSubmit() {
+    let valueSubmit = Object.assign({}, this.formulario.value);
+    valueSubmit = Object.assign(valueSubmit, {
+      frameworks: valueSubmit.frameworks
+        .map((_checked: boolean, index: number) => _checked ?  this.frameworks[index] : null)
+        .filter((v: any) => v != null),
+    });
+
+    console.log(valueSubmit);
+
     if(this.formulario.valid) {
-      this.http.post('servidor/form', JSON.stringify(this.formulario.value)).subscribe(dados => {
+      this.http.post('servidor/form', JSON.stringify(valueSubmit)).subscribe(dados => {
         console.log(dados);
         this.resetar();
       }, (error: any) => alert(error));
