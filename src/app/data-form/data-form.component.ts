@@ -1,10 +1,11 @@
+import { VerificarEmailService } from './../shared/verificar-email.service';
 import { EstadoBR } from './../shared/models/estado-br';
 import { DropdownService } from './../shared/dropdown.service';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, FormRecord, Validators } from '@angular/forms';
 import { CepService } from '../shared/cep.service';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { FormValidation } from '../shared/form-validations';
 
 @Component({
@@ -26,6 +27,7 @@ export class DataFormComponent implements OnInit {
     private http: HttpClient,
     private cepService: CepService,
     private dropdownService: DropdownService,
+    private verificarEmailService: VerificarEmailService,
     ) {
     // this.formulario = new FormGroup({
     //   nome: new FormControl(null),
@@ -37,7 +39,7 @@ export class DataFormComponent implements OnInit {
 
     this.formulario = this.formBuilder.group({
       nome: [null, [Validators.required, Validators.minLength(3)]],
-      email: [null, [Validators.required, Validators.email]],
+      email: [null, [Validators.required, Validators.email], [this.validarEmail.bind(this)]],
       confirmEmail: [null, [Validators.required, Validators.email, FormValidation.equalsTo('email')]],
       endereco: this.formBuilder.group({
         cep: [null, [Validators.required, FormValidation.cepValidator]],
@@ -70,6 +72,7 @@ export class DataFormComponent implements OnInit {
     this.cargos = this.dropdownService.cargos;
     this.tecnologias = this.dropdownService.tecnologias;
     this.newsletter = this.dropdownService.newsletter;
+    //this.verificarEmailService.verificarEmail('email@email.com').subscribe();
 
     // this.dropdownService.getEstados().subscribe(response => {
     //   this.estados = response as EstadoBR[];
@@ -156,5 +159,10 @@ export class DataFormComponent implements OnInit {
   setTecnologias() {
     const tecnologias = ['ruby',  'javascript'];
     this.formulario.get('tecnologias')?.setValue(tecnologias);
+  }
+
+  validarEmail(formControl: FormControl) {
+    return this.verificarEmailService.verificarEmail(formControl.value)
+      .pipe(map(emailExiste => emailExiste ? {emailInvalido: true} : null));
   }
 }

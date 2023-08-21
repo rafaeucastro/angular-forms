@@ -20,6 +20,8 @@
                 placeholder="Enter a valid email address" formControlName="email">
         </div>
         <small *ngIf="!fieldIsValid('email')" id="emailHelp" class="form-text">Email inválido!</small>
+        <small *ngIf="formulario.get('email')!.status === 'PENDING'" id="emailHelp" class="form-text">Validando email!</small>
+        <small *ngIf="formulario.get('email')!.hasError('emailInvalido')" id="emailHelp" class="form-text">Email já cadastrado!</small>
     </div>
 
     <div class="form-group">
