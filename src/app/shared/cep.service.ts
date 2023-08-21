@@ -7,10 +7,9 @@ export class CepService {
     constructor(private http: HttpClient){}
 
     consultaCep(cep: string, callback: (value : Object) => void) {
-        cep.replace(RegExp("\/D/g"), '');
-    
-        if (cep != "" && cep != null) {
-          var validaCep = RegExp('\^[0-9]{8}\$');
+      if (cep != "" && cep != null) {
+          cep = cep.replace(RegExp("\/D/g"), '');
+          const validaCep = RegExp('\^[0-9]{8}\$');
     
           if (validaCep.test(cep)) {
             const url = `https://viacep.com.br/ws/${cep}/json`;
@@ -22,6 +21,6 @@ export class CepService {
           }
         }
 
-        return of({});
+      return of({});
     }
 }

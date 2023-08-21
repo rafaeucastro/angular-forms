@@ -2,9 +2,10 @@ import { EstadoBR } from './../shared/models/estado-br';
 import { DropdownService } from './../shared/dropdown.service';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormRecord, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, FormRecord, Validators } from '@angular/forms';
 import { CepService } from '../shared/cep.service';
 import { Observable } from 'rxjs';
+import { FormValidation } from '../shared/form-validations';
 
 @Component({
   selector: 'app-data-form',
@@ -37,8 +38,9 @@ export class DataFormComponent implements OnInit {
     this.formulario = this.formBuilder.group({
       nome: [null, [Validators.required, Validators.minLength(3)]],
       email: [null, [Validators.required, Validators.email]],
+      confirmEmail: [null, [Validators.required, Validators.email, FormValidation.equalsTo('email')]],
       endereco: this.formBuilder.group({
-        cep: [null, [Validators.required]],
+        cep: [null, [Validators.required, FormValidation.cepValidator]],
         numero: [null, [Validators.required]],
         complemento: [null],
         rua: [null, [Validators.required]],
@@ -51,6 +53,7 @@ export class DataFormComponent implements OnInit {
       newsletter: ['s'],
       termos: [null, Validators.requiredTrue],
       frameworks: this.buildFrameworks(),
+
     });
 
     console.log(this.formulario);
@@ -81,7 +84,7 @@ export class DataFormComponent implements OnInit {
     if(!camposSimples.includes(campo)){
       input = this.formulario.get(['endereco', campo])
     };
-    return input!.valid && (input!.touched || input!.dirty);
+    return !(input?.hasError('required') && (input!.touched || input!.dirty));
   }
 
   onSubmit() {
@@ -131,7 +134,7 @@ export class DataFormComponent implements OnInit {
     
     this.formulario.patchValue({
       endereco: {
-        cep: dados.cep,
+        //cep: dados.cep,
         complemento: dados.complemento,
         rua: dados.logradouro,
         bairro: dados.bairro,
