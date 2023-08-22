@@ -46,7 +46,7 @@
             <div class="col-sm-3">
                 <label for="numero" class="form-label">Número</label>
                 <input type="text" id="numero" formControlName="numero" class="form-control">
-                <small *ngIf="!fieldIsValid('numero')">Número é obrigatório</small>
+                <error-msg field="numero" [control]="formulario.get('endereco.numero')!"></error-msg>
             </div>
             <div class="col-sm-6">
                 <label for="complemento" class="form-label">Complemento</label>
@@ -70,7 +70,7 @@
             <div class="col-sm-5">
                 <label for="bairro" class="form-label">Bairro</label>
                 <input type="text" id="bairro" formControlName="bairro" class="form-control">
-                <small *ngIf="!fieldIsValid('bairro')">Bairro é obrigatório</small>
+                <!-- <error-msg field="bairro" [control]="formulario.get(['endereco', 'bairro'])!"></error-msg> -->
             </div>
             <div class="col-sm-4">
                 <label for="cidade" class="form-label">Cidade</label>
