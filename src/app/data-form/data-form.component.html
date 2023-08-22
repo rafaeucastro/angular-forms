@@ -39,7 +39,7 @@
         <div class="form-group row">
             <div class="col-sm-3">
                 <label for="cep" class="form-label">CEP</label>
-                <input type="text" id="cep" formControlName="cep" class="form-control" (blur)="consultaCep()">
+                <input type="text" id="cep" formControlName="cep" class="form-control">
                 <small *ngIf="!fieldIsValid('cep')">CEP é obrigatório</small><br>
                 <small *ngIf="formulario.get('endereco.cep')!.hasError('cepInvalido')">CEP inválido</small>
             </div>

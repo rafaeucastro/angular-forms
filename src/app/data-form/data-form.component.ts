@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, FormRecord, Validators } from '@angular/forms';
 import { CepService } from '../shared/cep.service';
-import { Observable, map } from 'rxjs';
+import { Observable, distinctUntilChanged, map, switchMap, tap } from 'rxjs';
 import { FormValidation } from '../shared/form-validations';
 
 @Component({
@@ -59,6 +59,17 @@ export class DataFormComponent implements OnInit {
     });
 
     console.log(this.formulario);
+
+    this.formulario.get('endereco.cep')?.statusChanges
+      .pipe(
+        distinctUntilChanged(),
+        tap(value => console.log('status CEP: ' + value)),
+      )
+      .subscribe(status => {
+        if(status === 'VALID') {
+          this.consultaCep();
+        }
+      });
   }
 
   buildFrameworks() {
